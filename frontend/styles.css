@@ -1,9 +1,9 @@
-* {
-    text-align: center;
+*{    
     font-family: 'Courier New', Courier, monospace;
 }
 
 .home {
+    text-align: center;
     margin:0 10%;
     display: flex;
     flex-direction: column;
@@ -34,6 +34,8 @@
 }
 
 .signin-welcome{
+    text-align: center;
+
     color: black;
 }
 
@@ -44,10 +46,11 @@
 
 
 .signin .free-svg {
-  width: 400px;
+    width: 400px;
 }
 
 .signin .card {
+    width: 30%;
     padding: 40px;
 }
 
@@ -57,7 +60,7 @@
     justify-content: space-between;
 }
 
-.form-label, .btn{
+.signin-form .form-label, .signin-form .btn{
     margin-top: 15px;
 }
 
@@ -66,3 +69,8 @@
     text-decoration: none;
 }
 
+
+#signup-no-match{
+    color:red;
+    margin: 0px 0;
+}
