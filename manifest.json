@@ -1,0 +1,27 @@
+{
+  "name": "idk what the name is",
+  "version": "1.0",
+  "description": "APPLICATION THING",
+  "permissions": ["activeTab", "declarativeContent", "storage"],
+  "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "eyes-discord.png",
+      "32": "eyes-discord.png",
+      "48": "eyes-discord.png",
+      "128": "eyes-discord.png"
+    }
+  },
+  "icons": {
+    "16": "eyes-discord.png",
+    "32": "eyes-discord.png",
+    "48": "eyes-discord.png",
+    "128": "eyes-discord.png"
+  },
+  "options_page": "options.html",
+  "manifest_version": 2
+}
