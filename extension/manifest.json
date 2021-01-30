@@ -1,5 +1,5 @@
 {
-  "name": "idk what the name is",
+  "name": "applr",
   "version": "1.0",
   "description": "APPLICATION THING",
   "permissions": ["activeTab", "declarativeContent", "storage"],
@@ -10,17 +10,17 @@
   "page_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "eyes-discord.png",
-      "32": "eyes-discord.png",
-      "48": "eyes-discord.png",
-      "128": "eyes-discord.png"
+      "16": "paper.png",
+      "32": "paper.png",
+      "48": "paper.png",
+      "128": "paper.png"
     }
   },
   "icons": {
-    "16": "eyes-discord.png",
-    "32": "eyes-discord.png",
-    "48": "eyes-discord.png",
-    "128": "eyes-discord.png"
+    "16": "paper.png",
+    "32": "paper.png",
+    "48": "paper.png",
+    "128": "paper.png"
   },
   "options_page": "options.html",
   "manifest_version": 2
