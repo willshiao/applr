@@ -74,13 +74,14 @@ def populate():
     body = request.json
     if body is None:
       return { 'status': 'fail', 'message': 'Missing body' }
-    name = body['name']
-    cur = con.cursor()
-    cur.execute("SELECT value FROM applr.fields WHERE description = %s", (name, ))
-    row = cur.fetchone()
-    value = row[0]
-    body['value'] = value
-    return { 'status': 'success'}
+    for i in body:
+        name = i['name']
+        cur = con.cursor()
+        cur.execute("SELECT value FROM applr.fields WHERE description = %s", (name, ))
+        row = cur.fetchone()
+        value = row[0]
+        i['value'] = value
+    return { 'status': 'success','body': body}
 
 
     
