@@ -2,6 +2,7 @@ import psycopg2
 import jwt
 from flask import Flask, request
 import json
+from datetime import date
 
 app = Flask(__name__)
 
@@ -14,12 +15,24 @@ secret = ''
 def welcome():
     return 'hi'
 
-@app.route('/applications')
+@app.route('/applications', methods = ['GET'])
 def applications():
     cur = con.cursor()
     cur.execute("SELECT cname, link, job, status, app_date, last_resp, notes FROM applr.apps WHERE user_id = %s", (3,))
     rows = cur.fetchall()
     return {'data': rows}
+
+
+@app.route('/applications', methods = ['POST'])
+def add_applications():
+    body = request.json
+    if body is None:
+        return { 'status': 'fail', 'message': 'Missing body' }
+
+    cur = con.cursor()
+    cur.execute("INSERT INTO applr.apps (user_id, cname, link, job, status, app_date) VALUES (%s, %s, %s, %s, %s, %s)", (3, body['cname'], body['link'], body['job'], 'Applied', date.today()))
+    con.commit()
+    return { 'status': 'success' }
 
 @app.route('/login', methods = ['POST'])
 def user_login():
