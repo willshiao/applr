@@ -1,5 +1,13 @@
 const fieldCounter = {}
 
+function checkExistence(root) {
+  const hasInput = (root.querySelector('input[type="text"]') !== null)
+  const hasSelect = (root.querySelector('select') !== null)
+  const hasFile = (root.querySelector('div.drop-zone') !== null)
+  const hasCheckbox = (root.querySelector('input[type="checkbox"]') !== null)
+  return { hasInput, hasSelect, hasFile, hasCheckbox }
+}
+
 const fieldLabels = Array.from(document.querySelectorAll('div#application div.field>label:first-child, div#application div.field>fieldset>legend>label'))
   .filter(el => {
     let parent = el.parentNode
@@ -9,23 +17,18 @@ const fieldLabels = Array.from(document.querySelectorAll('div#application div.fi
     }
     console.log('El: ', el, '; Direct Parent: ', el.parentNode, '; Real Parent: ', parent)
     // Repeated from below, should restructure this better
-    const hasInput = (parent.querySelector('input[type="text"]') !== null)
-    const hasSelect = (parent.querySelector('select') !== null)
-    const hasFile = (parent.querySelector('div.drop-zone') !== null)
-    return hasInput || hasSelect || hasFile
+    const { hasInput, hasSelect, hasFile, hasCheckbox } = checkExistence(parent)
+    return hasInput || hasSelect || hasFile || hasCheckbox
   })
-const fields = fieldLabels
+  const fields = fieldLabels
   .map(el => ((el.parentNode.nodeName === 'LEGEND') ? el.parentNode.parentNode.parentNode : el.parentNode))
-const fieldNames = fieldLabels.map(el => el.innerText)
+  const fieldNames = fieldLabels.map(el => el.innerText)
   .map(text => text.trim())
   .map(text => text.split('\n')[0])
-const fieldInfo = fieldNames
+  const fieldInfo = fieldNames
   .map((fieldName, idx) => {
     const required = (fieldName[fieldName.length - 1] === '*')
     const el = fields[idx]
-    const hasInput = (el.querySelector('input[type="text"]') !== null)
-    const hasSelect = (el.querySelector('select') !== null)
-    const hasFile = (el.querySelector('div.drop-zone') !== null)
     let name = required ? fieldName.slice(0, fieldName.length - 1).trim() : fieldName
 
     if (name in fieldCounter) {
@@ -39,18 +42,23 @@ const fieldInfo = fieldNames
       required,
       name,
       el,
-      hasInput,
-      hasSelect,
-      hasFile
+      ...checkExistence(el)
     }
   })
 
 function getInfo (oldInfo) {
   return oldInfo.map(info => {
-    const { el, hasInput, hasSelect, hasFile } = info
+    let { el, hasInput, hasSelect, hasFile, hasCheckbox } = info
     let value = null
     let extraValue = null
 
+    if (hasCheckbox) {
+      const input = el.querySelector('input[type="text"]')
+      if (input && input.style.display === 'none') {
+        value = el.querySelector('input[type="checkbox"]').value
+        hasInput = false
+      }
+    }
     if (hasSelect) {
       console.log('Trying to get stuff for el: ', el)
       value = el.querySelector('select').value
@@ -83,10 +91,16 @@ function getInfo (oldInfo) {
 
 function setInfo (newInfo) {
   newInfo.forEach(info => {
-    const { el, hasInput, hasSelect, hasFile, value, extraValue } = info
+    let { el, hasInput, hasSelect, hasFile, value, extraValue } = info
     if (!value) {
       console.log('Missing value for: ', info, 'skipping...')
       return null
+    }
+    if (hasCheckbox) {
+      if (value === 'true' || value === 'false') {
+        el.querySelector('input[type="checkbox"]').value = value
+        hasInput = false
+      }
     }
     if (hasSelect) {
       el.querySelector('select').value = value
