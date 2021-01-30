@@ -46,7 +46,7 @@ def save():
 
     for i in body:
         cur = con.cursor()
-        cur.execute("INSERT INTO applr.fields (user_id, description, value, type) VALUES (%s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s", (3, i['name'], i['value'], 'input', i['name'],))
+        cur.execute("INSERT INTO applr.fields (user_id, description, value, type) VALUES (%s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s", (3, i['name'], i['value'], 'input', i['value'],))
         con.commit()
 
     return { 'status': 'success' }
@@ -77,13 +77,14 @@ def populate():
     body = request.json
     if body is None:
       return { 'status': 'fail', 'message': 'Missing body' }
-    name = body['name']
-    cur = con.cursor()
-    cur.execute("SELECT value FROM applr.fields WHERE description = %s", (name, ))
-    row = cur.fetchone()
-    value = row[0]
-    body['value'] = value
-    return { 'status': 'success'}
+    for i in body:
+        name = i['name']
+        cur = con.cursor()
+        cur.execute("SELECT value FROM applr.fields WHERE description = %s", (name, ))
+        row = cur.fetchone()
+        value = row[0]
+        i['value'] = value
+    return { 'status': 'success','body': body}
 
 
     
