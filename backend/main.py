@@ -1,9 +1,12 @@
 import psycopg2
+import jwt
 from flask import Flask, request
 app = Flask(__name__)
 
 con = psycopg2.connect(database="postgres", user="postgres", password="", host="34.83.221.162", port="5432")
 print("Database opened successfully")
+
+secret = ''
 
 @app.route('/')
 def welcome():
@@ -27,7 +30,8 @@ def user_login():
     print('Row: ', row)
     if row is None or row[1] != password:
         return { 'status': 'fail', 'message': 'Incorrect username or password!' }
-    return { 'status': 'success', 'token': 'todo' }
+    token = jwt.encode({ "user": username }, secret, algorithm="HS256")
+    return { 'status': 'success', 'token': token }
 
 @app.route('/register', methods = ['POST'])
 def user_registration():
@@ -44,4 +48,5 @@ def user_registration():
    cur = con.cursor()
    cur.execute("INSERT INTO applr.users (username, password) VALUES (%s, %s)", (username, password))
    con.commit()
-   return { 'status': 'success' }
+   token = jwt.encode({ "user": username }, secret, algorithm="HS256")
+   return { 'status': 'success', 'token': token }
