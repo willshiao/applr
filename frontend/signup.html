@@ -17,25 +17,22 @@
         <div class="card">
             <h1>Sign up</h1>
             <p>Enter your credentials details here.</p>
-            <div class="card-body signin-form">
-                <div>
-                    <label for="signup-form" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="signup-username" placeholder="Username">
-                  </div>
-                  <div>
-                    <label for="signup-form" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="signup-password" placeholder="Password">
-                  </div>
-                  <div>
-                    <label for="signup-form" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="confirm-signup-password" placeholder="Confirm Password">
-                  </div>
-                  <div>
-                      <button type="button" class="btn btn-primary">Sign In</button>
-                      <p>Already have an account? Sign in <a href="./signin.html">here</a>.</p>
-                  </div>
-            </div>
+            <form class="card-body signin-form" id="signup-form">
+                <label for="signup-form" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" id="signup-username" placeholder="Username">
+            
+                <label for="signup-form" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="signup-password" placeholder="Password">
+                
+                <label for="signup-form" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" name="confirmPassword" id="confirm-signup-password" placeholder="Confirm Password">
+                <p id="signup-no-match">Passwords do not match.</p>
+                
+                <input type="submit" id="signup-btn" class="btn btn-primary" value="Sign Up">
+                <p>Already have an account? Sign in <a href="./signin.html">here</a>.</p>
+            </form>
         </div>
     </div>
 </body>
+<script src="./signup.js"></script>
 </html>

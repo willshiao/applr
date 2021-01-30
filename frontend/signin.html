@@ -17,21 +17,22 @@
         <div class="card">
             <h1>Sign in</h1>
             <p>Enter your login details here.</p>
-            <div class="card-body signin-form">
-                <div>
-                    <label for="signin-form" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="signin-username" placeholder="Username">
-                  </div>
-                  <div>
-                    <label for="signin-form" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="signin-password" placeholder="Password">
-                  </div>
-                  <div>
-                      <button type="button" class="btn btn-primary">Sign In</button>
-                      <p>Don't have an account? Sign up <a href="./signup.html">here</a>.</p>
-                  </div>
-            </div>
+            <form class="card-body signin-form" id="login-form">
+                
+                <label for="login-form" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" id="signin-username" placeholder="Username">
+                
+                
+                <label for="login-form" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="signin-password" placeholder="Password">
+            
+            
+                <input type="submit" value="Sign In" id="login-btn" class="btn btn-primary">
+                <p>Don't have an account? Sign up <a href="./signup.html">here</a>.</p>
+                
+            </form>
         </div>
     </div>
 </body>
+<script src="./signin.js"></script>
 </html>
