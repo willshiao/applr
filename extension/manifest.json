@@ -1,7 +1,7 @@
 {
   "name": "applr",
   "version": "1.0",
-  "description": "APPLICATION THING",
+  "description": "Automate the tedious task of inputting your information in job applications in 1 click!",
   "permissions": ["activeTab", "declarativeContent", "storage"],
   "background": {
       "scripts": ["background.js"],
@@ -10,17 +10,17 @@
   "page_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "paper.png",
-      "32": "paper.png",
-      "48": "paper.png",
-      "128": "paper.png"
+      "16": "invalid.png",
+      "32": "invalid.png",
+      "48": "invalid.png",
+      "128": "invalid.png"
     }
   },
   "icons": {
-    "16": "paper.png",
-    "32": "paper.png",
-    "48": "paper.png",
-    "128": "paper.png"
+    "16": "invalid.png",
+    "32": "invalid.png",
+    "48": "invalid.png",
+    "128": "invalid.png"
   },
   "options_page": "options.html",
   "manifest_version": 2
