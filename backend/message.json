@@ -1,0 +1,173 @@
+[
+    {
+        "required": true,
+        "name": "First Name",
+        "el": {},
+        "hasInput": true,
+        "hasSelect": false,
+        "hasFile": false,
+        "value": "William"
+    },
+    {
+        "required": true,
+        "name": "Last Name",
+        "el": {},
+        "hasInput": true,
+        "hasSelect": false,
+        "hasFile": false,
+        "value": "Shiao"
+    },
+    {
+        "required": true,
+        "name": "Email",
+        "el": {},
+        "hasInput": true,
+        "hasSelect": false,
+        "hasFile": false,
+        "value": "willshiao@gmail.com"
+    },
+    {
+        "required": true,
+        "name": "Phone",
+        "el": {},
+        "hasInput": true,
+        "hasSelect": false,
+        "hasFile": false,
+        "value": "3106914266"
+    },
+    {
+        "required": true,
+        "name": "Location (City)",
+        "el": {},
+        "hasInput": true,
+        "hasSelect": false,
+        "hasFile": false,
+        "value": "Arcadia, California, United States"
+    },
+    {
+        "required": true,
+        "name": "Resume/CV",
+        "el": {},
+        "hasInput": false,
+        "hasSelect": false,
+        "hasFile": true,
+        "value": null
+    },
+    {
+        "required": false,
+        "name": "Cover Letter",
+        "el": {},
+        "hasInput": false,
+        "hasSelect": false,
+        "hasFile": true,
+        "value": null
+    },
+    {
+        "required": true,
+        "name": "Have you ever worked for a Sony company previously?",
+        "el": {},
+        "hasInput": true,
+        "hasSelect": false,
+        "hasFile": false,
+        "value": "Yes"
+    },
+    {
+        "required": true,
+        "name": "Are you authorized to work in the United States?",
+        "el": {},
+        "hasInput": true,
+        "hasSelect": false,
+        "hasFile": false,
+        "value": "Maybe"
+    },
+    {
+        "required": true,
+        "name": "Will you now, or in the future, require sponsorship to work in the United States?",
+        "el": {},
+        "hasInput": true,
+        "hasSelect": false,
+        "hasFile": false,
+        "value": "Maybe"
+    },
+    {
+        "required": true,
+        "name": "Will you need relocation assistance to work at this role's specified location?",
+        "el": {},
+        "hasInput": true,
+        "hasSelect": false,
+        "hasFile": false,
+        "value": "Yes"
+    },
+    {
+        "required": true,
+        "name": "Are you related to, or in a shared housing situation with, anyone who currently works for SIE or any SIE-affiliated studios?",
+        "el": {},
+        "hasInput": false,
+        "hasSelect": true,
+        "hasFile": false,
+        "value": "1"
+    },
+    {
+        "required": false,
+        "name": "If yes, please state their name, the department or studio they work for, and their job title (if you know it).",
+        "el": {},
+        "hasInput": true,
+        "hasSelect": false,
+        "hasFile": false,
+        "value": "Yes"
+    },
+    {
+        "required": true,
+        "name": "By selecting \"Yes\", I am certifying that, to the best of my knowledge, the information I have provided in this employment application is true and correct.",
+        "el": {},
+        "hasInput": false,
+        "hasSelect": true,
+        "hasFile": false,
+        "value": "1"
+    },
+    {
+        "required": false,
+        "name": "Gender",
+        "el": {},
+        "hasInput": false,
+        "hasSelect": true,
+        "hasFile": false,
+        "value": "1"
+    },
+    {
+        "required": false,
+        "name": "Are you Hispanic/Latino?",
+        "el": {},
+        "hasInput": false,
+        "hasSelect": true,
+        "hasFile": false,
+        "value": "No"
+    },
+    {
+        "required": false,
+        "name": "Please identify your race",
+        "el": {},
+        "hasInput": false,
+        "hasSelect": true,
+        "hasFile": false,
+        "value": "1"
+    },
+    {
+        "required": false,
+        "name": "Veteran Status",
+        "el": {},
+        "hasInput": false,
+        "hasSelect": true,
+        "hasFile": false,
+        "value": "1"
+    },
+    {
+        "required": false,
+        "name": "Disability Status",
+        "el": {},
+        "hasInput": false,
+        "hasSelect": true,
+        "hasFile": false,
+        "value": "2"
+    }
+]
