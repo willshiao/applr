@@ -5,7 +5,7 @@ import json
 
 app = Flask(__name__)
 
-con = psycopg2.connect(database="postgres", user="postgres", password="", host="34.83.221.162", port="5432")
+con = psycopg2.connect(database="postgres", user="postgres", password="rlppa", host="34.83.221.162", port="5432")
 print("Database opened successfully")
 
 secret = ''
@@ -16,7 +16,10 @@ def welcome():
 
 @app.route('/applications')
 def applications():
-    return 'ey these are the apps you\'ve applied to'
+    cur = con.cursor()
+    cur.execute("SELECT cname, link, job, status, app_date, last_resp, notes FROM applr.apps WHERE user_id = %s", (3,))
+    rows = cur.fetchall()
+    return {'data': rows}
 
 @app.route('/login', methods = ['POST'])
 def user_login():
