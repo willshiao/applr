@@ -1,17 +1,14 @@
 // can be where the user edits the auto fill info
 
-let page = document.getElementById('buttonDiv');
-const kButtonColors = ['#3aa757', '#e8453c', '#000000', '#4688f1'];
-function constructOptions(kButtonColors) {
-  for (let item of kButtonColors) {
-    let button = document.createElement('button');
-    button.style.backgroundColor = item;
-    button.addEventListener('click', function() {
-      chrome.storage.sync.set({color: item}, function() {
-        console.log('color is ' + item);
-      })
-    });
-    page.appendChild(button);
-  }
-}
-constructOptions(kButtonColors);
+const loginForm = document.getElementById("login-form");
+const loginBtn = document.getElementById("login-btn");
+const loginUser = document.getElementById("signin-username");
+
+loginBtn.addEventListener("click", (e)=> {
+    e.preventDefault();
+    const username = document.getElementById("signin-username").value;
+    const password = document.getElementById("signin-password").value;
+    console.log(username, password);
+    // window.location.href = "./applr.html";
+
+});

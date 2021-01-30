@@ -1,11 +1,11 @@
-let changeColor = document.getElementById('changeColor');
+let fillApplication = document.getElementById('fillApplication');
 
 chrome.storage.sync.get('color', function(data) {
-  changeColor.style.backgroundColor = data.color;
-  changeColor.setAttribute('value', data.color);
+  fillApplication.style.backgroundColor = data.color;
+  fillApplication.setAttribute('value', data.color);
 });
 
-changeColor.onclick = function(element) {
+fillApplication.onclick = function(element) {
     let color = element.target.value;
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       chrome.tabs.executeScript(
