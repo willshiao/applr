@@ -5,7 +5,7 @@ import json
 
 app = Flask(__name__)
 
-con = psycopg2.connect(database="postgres", user="postgres", password="rlppa", host="34.83.221.162", port="5432")
+con = psycopg2.connect(database="postgres", user="postgres", password="", host="34.83.221.162", port="5432")
 print("Database opened successfully")
 
 secret = ''
@@ -43,7 +43,7 @@ def save():
 
     for i in body:
         cur = con.cursor()
-        cur.execute("INSERT INTO applr.fields (user_id, description, value, type) VALUES (%s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s", (3, i['name'], 'Caaarroolllyyynn', 'input', i['name'],))
+        cur.execute("INSERT INTO applr.fields (user_id, description, value, type) VALUES (%s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s", (3, i['name'], i['value'], 'input', i['name'],))
         con.commit()
 
     return { 'status': 'success' }
