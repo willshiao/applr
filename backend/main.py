@@ -26,13 +26,13 @@ def user_login():
 
     username, password = body['username'], body['password']
     cur = con.cursor()
-    cur.execute("SELECT username, password FROM applr.users WHERE username = %s", (username,))
+    cur.execute("SELECT id, username, password FROM applr.users WHERE username = %s", (username,))
     row = cur.fetchone()
 
     print('Row: ', row)
-    if row is None or row[1] != password:
+    if row is None or row[2] != password:
         return { 'status': 'fail', 'message': 'Incorrect username or password!' }
-    token = jwt.encode({ "user": username }, secret, algorithm="HS256")
+    token = jwt.encode({ "id": row[0] }, secret, algorithm="HS256")
     return { 'status': 'success', 'token': token }
 
 @app.route('/save', methods = ['POST'])
@@ -43,7 +43,7 @@ def save():
 
     for i in body:
         cur = con.cursor()
-        cur.execute("INSERT INTO applr.fields (user_id, description, value, type) VALUES (%s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s", (3, i['name'], 'Caaarroolllyyynn', 'input', i['name'],))
+        cur.execute("INSERT INTO applr.fields (user_id, description, value, type) VALUES (%s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s", (3, i['name'], i['value'], 'input', i['name'],))
         con.commit()
 
     return { 'status': 'success' }
@@ -63,5 +63,25 @@ def user_registration():
    cur = con.cursor()
    cur.execute("INSERT INTO applr.users (username, password) VALUES (%s, %s)", (username, password))
    con.commit()
-   token = jwt.encode({ "user": username }, secret, algorithm="HS256")
+   cur = con.cursor()
+   cur.execute("SELECT id FROM applr.users WHERE username = %s", (username,))
+   row = cur.fetchone()
+   token = jwt.encode({ "id": row[0] }, secret, algorithm="HS256")
    return { 'status': 'success', 'token': token }
+
+@app.route('/populate', methods = ['POST'])
+def populate():
+    body = request.json
+    if body is None:
+      return { 'status': 'fail', 'message': 'Missing body' }
+    name = body['name']
+    cur = con.cursor()
+    cur.execute("SELECT value FROM applr.fields WHERE description = %s", (name, ))
+    row = cur.fetchone()
+    value = row[0]
+    body['value'] = value
+    return { 'status': 'success'}
+
+
+    
+    
