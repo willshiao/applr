@@ -1,0 +1,68 @@
+* {
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.home {
+    margin:0 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+.home .navbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.home .links a{
+    text-decoration: none;
+}
+
+
+.signin {
+    background-color: #9fa8da;
+    width: 100%;
+    height: 100%;
+    position:absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    
+}
+
+.signin-welcome{
+    color: black;
+}
+
+.signin-form p,a {
+    margin-top: 60px;
+    text-decoration: none;
+}
+
+
+.signin .free-svg {
+  width: 400px;
+}
+
+.signin .card {
+    padding: 40px;
+}
+
+.signin-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.form-label, .btn{
+    margin-top: 15px;
+}
+
+.signin-form p>a {
+    margin-top: 60px;
+    text-decoration: none;
+}
+
