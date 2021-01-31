@@ -1,3 +1,4 @@
+import redis
 import psycopg2
 import jwt
 from flask import Flask, request
@@ -15,7 +16,10 @@ nltk.download('punkt')
 JWT_SECRET = ''
 JWT_ALGORITHM = 'HS256'
 JACCARD_THRESHOLD = 0.07
+USE_REDIS = True
 
+if USE_REDIS:
+    r = redis.Redis(host='10.35.129.3', port=6379, decode_responses=True)
 con = psycopg2.connect(database="postgres", user="postgres", password="rlppa", host="34.83.221.162", port="5432")
 print("Database opened successfully", flush=True)
 
@@ -145,6 +149,11 @@ def create_app():
             cur = con.cursor()
             nice_val = i['niceValue'] if 'niceValue' in i else ''
             extra_val = i['extraValue'] if 'extraValue' in i else ''
+            if USE_REDIS:
+                hname = f'{user_id}:{i["name"]}'
+                r.hset(hname, 'value', i['value'])
+                r.hset(hname, 'niceValue', nice_val)
+                r.hset(hname, 'extraValue', extra_val)
             cur.execute("INSERT INTO applr.fields (user_id, description, value, nice_value, extra_value, type) VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s, nice_value = %s, extra_value = %s",
                 (user_id, i['name'], i['value'], nice_val, extra_val, 'input', i['value'], nice_val, extra_val))
             con.commit()
@@ -188,6 +197,13 @@ def create_app():
             return { 'status': 'fail', 'message': 'Missing body' }
         for i in body:
             name = i['name']
+            if USE_REDIS:
+                hash_name = f'{user_id}:{name}'
+                if r.exists(hash_name):
+                    i['value'] = r.hget(hash_name, 'value')
+                    i['extraValue'] = r.hget(hash_name, 'extraValue')
+                    i['niceValue'] = r.hget(hash_name, 'niceValue')
+                    continue
             cur = con.cursor()
             cur.execute("SELECT value, extra_value, nice_value FROM applr.fields WHERE description = %s AND user_id = %s", (name, user_id))
             row = cur.fetchone()
