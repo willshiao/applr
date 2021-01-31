@@ -142,7 +142,7 @@ function setInfo (newInfo) {
           .filter(n => n !== 'select2-default')
           .join(' ')
       } else {
-        inputs[0].value = value
+        inputs[0].value = niceValue || value
         if (extraValue && inputs.length > 1) {
           inputs[1].value = extraValue
         }
