@@ -9,7 +9,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-con = psycopg2.connect(database="postgres", user="postgres", password="", host="34.83.221.162", port="5432")
+con = psycopg2.connect(database="postgres", user="postgres", password="rlppa", host="34.83.221.162", port="5432")
 print("Database opened successfully", flush=True)
 
 JWT_SECRET = ''
@@ -137,6 +137,7 @@ def populate():
         cur = con.cursor()
         cur.execute("SELECT value FROM applr.fields WHERE description = %s", (name, ))
         row = cur.fetchone()
-        value = row[0]
-        i['value'] = value
+        if row is not None:
+            value = row[0]
+            i['value'] = value
     return { 'status': 'success','body': body}
