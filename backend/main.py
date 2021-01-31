@@ -101,7 +101,3 @@ def populate():
         value = row[0]
         i['value'] = value
     return { 'status': 'success','body': body}
-
-
-    
-    
