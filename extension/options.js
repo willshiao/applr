@@ -30,6 +30,9 @@ loginForm.addEventListener("submit", (e)=> {
         // console.log(myStorage.getItem("token"))
         // chrome.storage.local.set( { token: token }, () => console.log('Token is set to ' + token))
         // chrome.storage.local.get(['token'], (result) => console.log('Value currently is ' + result.key))
+        if (data.status === "success") {
+            window.location.href = "./confirmation.html"
+        }
     })
     // console.log(username, password)  
     // window.location.href = "./applr.html"
