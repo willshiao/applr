@@ -27,7 +27,7 @@ logOut.addEventListener('click', (e) => {
     window.location.href = "./signin.html"
 })
 
-const res = await fetch('http://localhost:5000/applications', {
+const res = await fetch('https://applr-api.wls.ai/applications', {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

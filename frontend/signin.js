@@ -14,7 +14,7 @@ loginForm.addEventListener("submit", (e)=> {
     const username = document.getElementById("signin-username").value;
     const password = document.getElementById("signin-password").value;
     console.log(username, password)
-    fetch('http://localhost:5000/login', {
+    fetch('https://applr-api.wls.ai/login', {
         method: "POST", 
         body: JSON.stringify({
             username: username,
@@ -40,8 +40,8 @@ loginForm.addEventListener("submit", (e)=> {
                 icon: "success",
                 button: "Close",
               }).then(function() {
-                  window.location.href = "./../extension/confirmation.html";
-                // window.location = "./apprl.html";
+                //   window.location.href = "./../extension/confirmation.html";
+                window.location = "/applr.html";
             });
         }
         else {

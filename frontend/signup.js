@@ -23,7 +23,7 @@ signUpForm.addEventListener("submit", (e)=>{
     const password = signUpForm.password.value;
     const confirmPassword = signUpForm.confirmPassword.value;
     console.log(username, password)
-    fetch("http://localhost:5000/register", {
+    fetch("https://applr-api.wls.ai/register", {
         method: "POST",
         body: JSON.stringify({
             username: username,

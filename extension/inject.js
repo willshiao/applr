@@ -185,7 +185,7 @@ function rehydrateEls(data) {
 const myStorage = window.localStorage
 
 async function saveFormValues() {
-  const res = await fetch('http://localhost:5000/save', {
+  const res = await fetch('https://applr-api.wls.ai/save', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -207,7 +207,7 @@ function getAppInfo() {
 
 async function saveApplicationValues() {
   const { companyName, position, link } = getAppInfo()
-  const res = await fetch('http://localhost:5000/applications', {
+  const res = await fetch('https://applr-api.wls.ai/applications', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -224,7 +224,7 @@ async function saveApplicationValues() {
 }
 
 async function loadFormValues() {
-  const res = await fetch('http://localhost:5000/populate', {
+  const res = await fetch('https://applr-api.wls.ai/populate', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
