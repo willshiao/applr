@@ -8,9 +8,9 @@ function checkExistence(root) {
 }
 
 // To allow for multiple injections, we use let
-let fieldCounter = {}
+const fieldCounter = {}
 
-let fieldLabels = Array.from(document.querySelectorAll('div#application div.field>label:first-child, div#application div.field>fieldset>legend>label'))
+const fieldLabels = Array.from(document.querySelectorAll('div#application div.field>label:first-child, div#application div.field>fieldset>legend>label'))
   .filter(el => {
     let parent = el.parentNode
     if (parent.nodeName === 'LEGEND') {
@@ -22,14 +22,14 @@ let fieldLabels = Array.from(document.querySelectorAll('div#application div.fiel
     const { hasInput, hasSelect, hasFile, hasCheckbox } = checkExistence(parent)
     return hasInput || hasSelect || hasFile || hasCheckbox
   })
-let fields = fieldLabels
+const fields = fieldLabels
   .map(el => ((el.parentNode.nodeName === 'LEGEND') ? el.parentNode.parentNode.parentNode : el.parentNode))
 
-let fieldNames = fieldLabels.map(el => el.innerText)
+const fieldNames = fieldLabels.map(el => el.innerText)
   .map(text => text.trim())
   .map(text => text.split('\n')[0])
 
-let fieldInfo = fieldNames
+const fieldInfo = fieldNames
   .map((fieldName, idx) => {
     const required = (fieldName[fieldName.length - 1] === '*')
     const el = fields[idx]
@@ -225,9 +225,16 @@ async function loadFormValues() {
   setInfo(body)
 }
 
+document.querySelectorAll('form')
+  .forEach(f =>f.addEventListener('submit', (evt) => {
+    evt.preventDefault()
+    console.log('Intercepted form submit!')
+  })
+  )
+
 loadFormValues()
 
 // saveFormValues()
 // saveApplicationValues()
-console.log(getInfo(fieldInfo))
+// console.log(getInfo(fieldInfo))
 })()
