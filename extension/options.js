@@ -4,6 +4,8 @@ const loginForm = document.getElementById("login-form");
 const loginBtn = document.getElementById("login-btn");
 const loginUser = document.getElementById("signin-username");
 
+const myStorage = window.localStorage
+
 loginForm.addEventListener("submit", (e)=> {
     e.preventDefault();
     const username = document.getElementById("signin-username").value;
@@ -24,7 +26,10 @@ loginForm.addEventListener("submit", (e)=> {
     .then(function (data) {
         // console.log(data)
         let token = data.token
-        chrome.storage.sync.set( { token: token }, () => console.log('Token is set to ' + token))
+        myStorage.setItem("token", token)
+        console.log(myStorage.getItem("token"))
+        // chrome.storage.local.set( { token: token }, () => console.log('Token is set to ' + token))
+        // chrome.storage.local.get(['token'], (result) => console.log('Value currently is ' + result.key))
     })
     // console.log(username, password)  
     // window.location.href = "./applr.html"
