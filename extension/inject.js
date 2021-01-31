@@ -180,7 +180,7 @@ async function saveFormValues() {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + myStorage.getItem("applrToken")
+      'Authorization': 'Bearer ' + secretToken
     },
     body: JSON.stringify(getInfo(fieldInfo))
   })
@@ -202,7 +202,7 @@ async function saveApplicationValues() {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + myStorage.getItem("applrToken")
+      'Authorization': 'Bearer ' + secretToken
     },
     body: JSON.stringify({
       cname: companyName,
@@ -219,7 +219,7 @@ async function loadFormValues() {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + myStorage.getItem("applrToken")
+      'Authorization': 'Bearer ' + secretToken
     },
     body: JSON.stringify(fieldInfo)
   })
