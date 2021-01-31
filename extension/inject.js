@@ -149,7 +149,8 @@ async function saveFormValues() {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6M30.1qmoIT5HL0HA7PNzXykGC1YbjBmnAelbEl4X77U1-Ig'
     },
     body: JSON.stringify(getInfo(fieldInfo))
   })
@@ -170,7 +171,8 @@ async function saveApplicationValues() {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6M30.1qmoIT5HL0HA7PNzXykGC1YbjBmnAelbEl4X77U1-Ig'
     },
     body: JSON.stringify({
       cname: companyName,
@@ -181,5 +183,5 @@ async function saveApplicationValues() {
   console.log('Saved application: ', await res.json())
 }
 
-// saveFormValues()
+saveFormValues()
 saveApplicationValues()
