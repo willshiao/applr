@@ -38,7 +38,7 @@ def applications():
     elif auth == 'missing':
         return { 'status': 'fail', 'message': 'No token' }
     cur = con.cursor()
-    cur.execute("SELECT cname, link, job, status, app_date, last_resp, notes FROM applr.apps WHERE user_id = %s", (3,))
+    cur.execute("SELECT cname, job, status, app_date, last_resp, notes, link, aid FROM applr.apps WHERE user_id = %s", (3,))
     rows = cur.fetchall()
     return {'data': rows}
 
