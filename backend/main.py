@@ -31,6 +31,12 @@ def welcome():
 
 @app.route('/applications', methods = ['GET'])
 def applications():
+    jwt_token = request.headers.get('authorization', None)
+    auth = authenticate(jwt_token)
+    if auth == 'invalid':
+        return { 'status': 'fail', 'message': 'Token is invalid' }
+    elif auth == 'missing':
+        return { 'status': 'fail', 'message': 'No token' }
     cur = con.cursor()
     cur.execute("SELECT cname, link, job, status, app_date, last_resp, notes FROM applr.apps WHERE user_id = %s", (3,))
     rows = cur.fetchall()
@@ -39,6 +45,12 @@ def applications():
 
 @app.route('/applications', methods = ['POST'])
 def add_applications():
+    jwt_token = request.headers.get('authorization', None)
+    auth = authenticate(jwt_token)
+    if auth == 'invalid':
+        return { 'status': 'fail', 'message': 'Token is invalid' }
+    elif auth == 'missing':
+        return { 'status': 'fail', 'message': 'No token' }
     body = request.json
     if body is None:
         return { 'status': 'fail', 'message': 'Missing body' }
