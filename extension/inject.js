@@ -94,7 +94,7 @@ function getInfo (oldInfo) {
 
 function setInfo (newInfo) {
   newInfo.forEach(info => {
-    let { el, hasInput, hasSelect, hasFile, value, extraValue } = info
+    let { el, hasInput, hasSelect, hasFile, hasCheckbox, value, extraValue } = info
     if (!value) {
       console.log('Missing value for: ', info, 'skipping...')
       return null
@@ -183,5 +183,22 @@ async function saveApplicationValues() {
   console.log('Saved application: ', await res.json())
 }
 
-saveFormValues()
-saveApplicationValues()
+async function loadFormValues() {
+  const res = await fetch('http://localhost:5000/populate', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6M30.1qmoIT5HL0HA7PNzXykGC1YbjBmnAelbEl4X77U1-Ig'
+    },
+    body: JSON.stringify(fieldInfo)
+  })
+  const { body } = await res.json()
+  rehydrateEls(body)
+  setInfo(body)
+}
+
+loadFormValues()
+
+// saveFormValues()
+// saveApplicationValues()
