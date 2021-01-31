@@ -5,6 +5,10 @@ const noMatch = document.getElementById("signup-no-match");
 noMatch.style.display = "none";
 const myStorage = window.localStorage;
 
+if (myStorage.getItem("applrToken")) {
+    window.location.href = "./applr.html"
+}
+
 loginForm.addEventListener("submit", (e)=> {
     e.preventDefault();
     const username = document.getElementById("signin-username").value;
