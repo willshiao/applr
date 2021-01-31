@@ -2,12 +2,34 @@ async function main () {
 
 var editor; // use a global for the submit and return data rendering in the examples
 var dataTable;
+const myStorage = window.localStorage
+console.log("hello")
+console.log(myStorage.getItem("applrToken"))
 // fetch data
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6M30.1qmoIT5HL0HA7PNzXykGC1YbjBmnAelbEl4X77U1-Ig
+const signIn = document.getElementById("sign-in")
+const signUp = document.getElementById("sign-up")
+const logOut = document.getElementById("logout-btn")
+
+if (myStorage.getItem("applrToken")) {
+    signIn.removeAttribute("href")
+    signIn.innerHTML = "Welcome back!"
+    signUp.innerHTML = ""
+} else {
+    logOut.style.display = "none"
+}
+
+logOut.addEventListener('click', (e) => {
+    e.preventDefault()
+    myStorage.clear()
+    window.location.href = "./signin.html"
+})
+
 const res = await fetch('http://localhost:5000/applications', {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6M30.1qmoIT5HL0HA7PNzXykGC1YbjBmnAelbEl4X77U1-Ig'
+      'Authorization': 'Bearer ' + myStorage.getItem("applrToken")
     },
   })
 
