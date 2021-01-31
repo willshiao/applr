@@ -2,10 +2,11 @@ import psycopg2
 import jwt
 from flask import Flask, request
 import json
+from datetime import date
 
 app = Flask(__name__)
 
-con = psycopg2.connect(database="postgres", user="postgres", password="", host="34.83.221.162", port="5432")
+con = psycopg2.connect(database="postgres", user="postgres", password="rlppa", host="34.83.221.162", port="5432")
 print("Database opened successfully")
 
 secret = ''
@@ -14,9 +15,24 @@ secret = ''
 def welcome():
     return 'hi'
 
-@app.route('/applications')
+@app.route('/applications', methods = ['GET'])
 def applications():
-    return 'ey these are the apps you\'ve applied to'
+    cur = con.cursor()
+    cur.execute("SELECT cname, link, job, status, app_date, last_resp, notes FROM applr.apps WHERE user_id = %s", (3,))
+    rows = cur.fetchall()
+    return {'data': rows}
+
+
+@app.route('/applications', methods = ['POST'])
+def add_applications():
+    body = request.json
+    if body is None:
+        return { 'status': 'fail', 'message': 'Missing body' }
+
+    cur = con.cursor()
+    cur.execute("INSERT INTO applr.apps (user_id, cname, link, job, status, app_date) VALUES (%s, %s, %s, %s, %s, %s)", (3, body['cname'], body['link'], body['job'], 'Applied', date.today()))
+    con.commit()
+    return { 'status': 'success' }
 
 @app.route('/login', methods = ['POST'])
 def user_login():
@@ -43,7 +59,7 @@ def save():
 
     for i in body:
         cur = con.cursor()
-        cur.execute("INSERT INTO applr.fields (user_id, description, value, type) VALUES (%s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s", (3, i['name'], i['value'], 'input', i['name'],))
+        cur.execute("INSERT INTO applr.fields (user_id, description, value, type) VALUES (%s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s", (3, i['name'], i['value'], 'input', i['value'],))
         con.commit()
 
     return { 'status': 'success' }
@@ -74,13 +90,14 @@ def populate():
     body = request.json
     if body is None:
       return { 'status': 'fail', 'message': 'Missing body' }
-    name = body['name']
-    cur = con.cursor()
-    cur.execute("SELECT value FROM applr.fields WHERE description = %s", (name, ))
-    row = cur.fetchone()
-    value = row[0]
-    body['value'] = value
-    return { 'status': 'success'}
+    for i in body:
+        name = i['name']
+        cur = con.cursor()
+        cur.execute("SELECT value FROM applr.fields WHERE description = %s", (name, ))
+        row = cur.fetchone()
+        value = row[0]
+        i['value'] = value
+    return { 'status': 'success','body': body}
 
 
     
