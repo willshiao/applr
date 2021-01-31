@@ -10,9 +10,20 @@ app = Flask(__name__)
 CORS(app)
 
 con = psycopg2.connect(database="postgres", user="postgres", password="", host="34.83.221.162", port="5432")
-print("Database opened successfully")
+print("Database opened successfully", flush=True)
 
-secret = ''
+JWT_SECRET = ''
+JWT_ALGORITHM = 'HS256'
+
+def authenticate(jwt_token):
+    if jwt_token:
+        jwt_token = jwt_token.split(' ')[-1]
+        try:
+            jwt.decode(jwt_token, JWT_SECRET, algorithms=JWT_ALGORITHM)
+        except (jwt.DecodeError, jwt.ExpiredSignatureError):
+            return 'invalid'
+    else:
+        return 'missing'
 
 @app.route('/')
 def welcome():
@@ -20,6 +31,12 @@ def welcome():
 
 @app.route('/applications', methods = ['GET'])
 def applications():
+    jwt_token = request.headers.get('authorization', None)
+    auth = authenticate(jwt_token)
+    if auth == 'invalid':
+        return { 'status': 'fail', 'message': 'Token is invalid' }
+    elif auth == 'missing':
+        return { 'status': 'fail', 'message': 'No token' }
     cur = con.cursor()
     cur.execute("SELECT cname, link, job, status, app_date, last_resp, notes FROM applr.apps WHERE user_id = %s", (3,))
     rows = cur.fetchall()
@@ -28,6 +45,12 @@ def applications():
 
 @app.route('/applications', methods = ['POST'])
 def add_applications():
+    jwt_token = request.headers.get('authorization', None)
+    auth = authenticate(jwt_token)
+    if auth == 'invalid':
+        return { 'status': 'fail', 'message': 'Token is invalid' }
+    elif auth == 'missing':
+        return { 'status': 'fail', 'message': 'No token' }
     body = request.json
     if body is None:
         return { 'status': 'fail', 'message': 'Missing body' }
@@ -51,11 +74,17 @@ def user_login():
     print('Row: ', row)
     if row is None or row[2] != password:
         return { 'status': 'fail', 'message': 'Incorrect username or password!' }
-    token = jwt.encode({ "id": row[0] }, secret, algorithm="HS256")
+    token = jwt.encode({ "id": row[0] }, JWT_SECRET, algorithm=JWT_ALGORITHM)
     return { 'status': 'success', 'token': token }
 
 @app.route('/save', methods = ['POST'])
 def save(): 
+    jwt_token = request.headers.get('authorization', None)
+    auth = authenticate(jwt_token)
+    if auth == 'invalid':
+        return { 'status': 'fail', 'message': 'Token is invalid' }
+    elif auth == 'missing':
+        return { 'status': 'fail', 'message': 'No token' }
     body = request.json
     if body is None:
         return { 'status': 'fail', 'message': 'Missing body' }
@@ -85,11 +114,17 @@ def user_registration():
    cur = con.cursor()
    cur.execute("SELECT id FROM applr.users WHERE username = %s", (username,))
    row = cur.fetchone()
-   token = jwt.encode({ "id": row[0] }, secret, algorithm="HS256")
+   token = jwt.encode({ "id": row[0] }, JWT_SECRET, algorithm=JWT_ALGORITHM)
    return { 'status': 'success', 'token': token }
 
 @app.route('/populate', methods = ['POST'])
 def populate():
+    jwt_token = request.headers.get('authorization', None)
+    auth = authenticate(jwt_token)
+    if auth == 'invalid':
+        return { 'status': 'fail', 'message': 'Token is invalid' }
+    elif auth == 'missing':
+        return { 'status': 'fail', 'message': 'No token' }
     body = request.json
     if body is None:
       return { 'status': 'fail', 'message': 'Missing body' }
