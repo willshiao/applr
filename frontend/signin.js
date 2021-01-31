@@ -31,8 +31,15 @@ loginForm.addEventListener("submit", (e)=> {
         // chrome.storage.local.set( { token: token }, () => console.log('Token is set to ' + token))
         // chrome.storage.local.get(['token'], (result) => console.log('Value currently is ' + result.key))
         if (data.status === "success") {
-            window.location.href = "./confirmation.html";
             noMatch.style.display = "none";
+            swal({
+                title: "Signed in!",
+                icon: "success",
+                button: "Close",
+              }).then(function() {
+                window.location = "./confirmation.html";
+            });
+            // window.location.href = "";
         }
         else {
             noMatch.style.display = "block";
