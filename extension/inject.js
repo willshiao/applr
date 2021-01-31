@@ -172,13 +172,15 @@ function rehydrateEls(data) {
 // console.log(fieldInfo)
 // console.log(getInfo(fieldInfo))
 // console.log(JSON.stringify(getInfo(fieldInfo)))
+const myStorage = window.localStorage
+
 async function saveFormValues() {
   const res = await fetch('http://localhost:5000/save', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6M30.1qmoIT5HL0HA7PNzXykGC1YbjBmnAelbEl4X77U1-Ig'
+      'Authorization': 'Bearer ' + myStorage.getItem("applrToken")
     },
     body: JSON.stringify(getInfo(fieldInfo))
   })
@@ -200,7 +202,7 @@ async function saveApplicationValues() {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6M30.1qmoIT5HL0HA7PNzXykGC1YbjBmnAelbEl4X77U1-Ig'
+      'Authorization': 'Bearer ' + myStorage.getItem("applrToken")
     },
     body: JSON.stringify({
       cname: companyName,
@@ -217,7 +219,7 @@ async function loadFormValues() {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6M30.1qmoIT5HL0HA7PNzXykGC1YbjBmnAelbEl4X77U1-Ig'
+      'Authorization': 'Bearer ' + myStorage.getItem("applrToken")
     },
     body: JSON.stringify(fieldInfo)
   })
