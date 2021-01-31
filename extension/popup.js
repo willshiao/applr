@@ -6,6 +6,7 @@ chrome.storage.sync.get('color', function(data) {
 });
 
 fillApplication.onclick = function(element) {
+  if (window.localStorage.getItem("applrToken")) {
     let color = element.target.value;
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       chrome.tabs.executeScript(tabs[0].id, {code: 'document.body.style.backgroundColor = "' + color + '";'});
@@ -19,7 +20,12 @@ fillApplication.onclick = function(element) {
           });
         });
       })
-    });
+    })
+  } else {
+    let button = document.getElementById("fillApplication")
+    button.style.backgroundColor = "#FF0000"
+    button.innerHTML = "Not signed in!"
+  }
 };
 
 chrome.runtime.sendMessage({
