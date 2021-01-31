@@ -1,10 +1,9 @@
-import swal from 'sweetalert2';
 const loginForm = document.getElementById("login-form");
 const loginBtn = document.getElementById("login-btn");
 const loginUser = document.getElementById("signin-username");
 const noMatch = document.getElementById("signup-no-match");
 noMatch.style.display = "none";
-const myStorage = window.localStorage
+const myStorage = window.localStorage;
 
 loginForm.addEventListener("submit", (e)=> {
     e.preventDefault();
@@ -37,9 +36,9 @@ loginForm.addEventListener("submit", (e)=> {
                 icon: "success",
                 button: "Close",
               }).then(function() {
-                window.location = "./confirmation.html";
+                  window.location.href = "./../extension/confirmation.html";
+                // window.location = "./apprl.html";
             });
-            // window.location.href = "";
         }
         else {
             noMatch.style.display = "block";

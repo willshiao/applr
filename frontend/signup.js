@@ -40,15 +40,14 @@ signUpForm.addEventListener("submit", (e)=>{
         myStorage.setItem('applrToken', token)
         if (data.status === "success") {
             noMatch.style.display = "none"
-            window.location.href = "../extension/confirmation.html"
-            // swal({
-            //     title: "Signed up!",
-            //     icon: "success",
-            //     button: "Close",
-            // })
-            // .then(funtion() {
-            //     window.location.href = "./applr.html"
-            // })
+            // window.location.href = "../extension/confirmation.html"
+            swal({
+                title: "Signed up!",
+                icon: "success",
+                button: "Close",
+              }).then(function() {
+                  window.location.href = "./../extension/confirmation.html";
+            });
         } else {
             noMatch.style.display = "block"
         }
