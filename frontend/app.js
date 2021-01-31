@@ -30,10 +30,12 @@ appData = {"data": []}
 data["data"].forEach((app)=>{
     var appl = {};
     var i = 0;
+    app[4] = moment(app[4]).format('L');
+    app[5] = moment(app[5]).format('L');
     for (i; i < app.length; i++) {
         appl[colNames[i]]  = app[i];
     }
-    appl[colNames[i]] = appData["data"].length;
+    appl[colNames[i]] = appData["data"].length; // probably should change this to the application id
     app = appl;
     appData["data"].push(appl);
 })
@@ -45,7 +47,7 @@ $(document).ready(function() {
     editor = new $.fn.dataTable.Editor( {
         table: "#dataTable",
         fields: [ 
-            {label: "Row Id", name: "DT_RowId" },
+           
             {
                 label: "Company Name", 
                 name:"company"
