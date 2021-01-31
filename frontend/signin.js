@@ -1,4 +1,4 @@
-
+import swal from 'sweetalert2';
 const loginForm = document.getElementById("login-form");
 const loginBtn = document.getElementById("login-btn");
 const loginUser = document.getElementById("signin-username");
