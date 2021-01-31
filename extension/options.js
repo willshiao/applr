@@ -27,7 +27,7 @@ loginForm.addEventListener("submit", (e)=> {
         // console.log(data)
         let token = data.token
         myStorage.setItem("token", token)
-        console.log(myStorage.getItem("token"))
+        // console.log(myStorage.getItem("token"))
         // chrome.storage.local.set( { token: token }, () => console.log('Token is set to ' + token))
         // chrome.storage.local.get(['token'], (result) => console.log('Value currently is ' + result.key))
     })
