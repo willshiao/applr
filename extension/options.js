@@ -28,4 +28,9 @@ loginForm.addEventListener("submit", (e)=> {
     })
     // console.log(username, password)  
     // window.location.href = "./applr.html"
+    swal({
+        title: "Signed in!",
+        icon: "success",
+        button: "Close",
+      });
 })
