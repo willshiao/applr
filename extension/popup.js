@@ -16,3 +16,8 @@ fillApplication.onclick = function(element) {
       });
     });
 };
+
+chrome.runtime.sendMessage({
+  action: 'updateIcon',
+  value: false
+});
