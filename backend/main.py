@@ -4,16 +4,22 @@ from flask import Flask, request
 import json
 from datetime import date
 from flask_cors import CORS
-
+import nltk
+from nltk.corpus import stopwords
+from nltk import word_tokenize
+import string
 
 app = Flask(__name__)
 CORS(app)
 
+nltk.download('stopwords')
+nltk.download('punkt')
 con = psycopg2.connect(database="postgres", user="postgres", password="rlppa", host="34.83.221.162", port="5432")
 print("Database opened successfully", flush=True)
 
 JWT_SECRET = ''
 JWT_ALGORITHM = 'HS256'
+JACCARD_THRESHOLD = 0.07
 
 def authenticate(jwt_token):
     if jwt_token:
@@ -125,6 +131,48 @@ def user_registration():
     token = jwt.encode({ "id": row[0] }, JWT_SECRET, algorithm=JWT_ALGORITHM)
     return { 'status': 'success', 'token': token }
 
+table = str.maketrans('/', ' ', '\'[\\]^_`{|}~"#$%&()*+,-:;<=>@?.!' + string.digits)
+def clean_chars(text):
+    text = text.replace('\t', ' ')
+    text = text.translate(table)
+    return text.strip()
+
+sw_set = set(stopwords.words('english'))
+def clean_text(text):
+    text = clean_chars(text)
+    words = (x.lower() for x in word_tokenize(text))
+    words = [word for word in words if word not in sw_set]
+    return words
+
+def jaccard(a, b):
+    a_s = set(a)
+    b_s = set(b)
+    if len(a_s) == 0 and len(b_s) == 0:
+        return 1
+    return len(a_s & b_s) / len(a_s | b_s)
+
+def fuzzy_match(user_id, entry):
+    cur = con.cursor()
+    cur.execute("SELECT description, value, extra_value, nice_value FROM applr.fields WHERE user_id = %s", (user_id,))
+    rows = cur.fetchall()
+    target = clean_text(entry['name'])
+
+    max_idx = 0
+    max_val = 0
+    for i in range(len(rows)):
+        row = rows[i]
+        pieces = clean_text(row[0])
+        jacc = jaccard(target, pieces)
+        if jacc > max_val:
+            max_idx = i
+            max_val = jacc
+    if max_val < JACCARD_THRESHOLD:
+        return None
+    print(f'Found match between {rows[max_idx][0]} and {entry["name"]}: ', max_val)
+    return rows[max_idx][1:]
+
+
+
 @app.route('/populate', methods = ['POST'])
 def populate():
     jwt_token = request.headers.get('authorization', None)
@@ -143,6 +191,8 @@ def populate():
         cur = con.cursor()
         cur.execute("SELECT value, extra_value, nice_value FROM applr.fields WHERE description = %s AND user_id = %s", (name, user_id))
         row = cur.fetchone()
+        if row is None:
+            row = fuzzy_match(user_id, i)
         if row is not None:
             i['value'] = row[0]
             i['extraValue'] = row[1]

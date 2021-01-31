@@ -68,14 +68,20 @@ function getInfo (oldInfo) {
     if (hasSelect) {
       console.log('Trying to get stuff for el: ', el)
       value = el.querySelector('select').value
-      niceValue = el.querySelector('span.select2-chosen').innerText
+      const chosen = el.querySelector('span.select2-chosen')
+      if (chosen) {
+        niceValue = chosen.innerText
+      }
     } else if (hasInput) {
       const inputs = el.querySelectorAll('input[type="text"]')
       // Handle special "fake input" cases
       if (inputs[0].className.includes('select')) {
         console.log('Fake input detected!')
         value = el.querySelector('input[type="hidden"]').value
-        niceValue = el.querySelector('span.select2-chosen').innerText
+        const chosen = el.querySelector('span.select2-chosen')
+        if (chosen) {
+          niceValue = chosen.innerText
+        }
       } else {
         value = inputs[0].value
         if (inputs.length > 1) {
@@ -113,7 +119,8 @@ function setInfo (newInfo) {
     }
     if (hasSelect) {
       el.querySelector('select').value = value
-      el.querySelector('span.select2-chosen').innerText = niceValue
+      const chosen = el.querySelector('span.select2-chosen')
+      if (chosen) chosen.innerText = niceValue
       // Change color
       const selectDiv = el.querySelector('.select2-default')
       if (!selectDiv) {
@@ -130,7 +137,10 @@ function setInfo (newInfo) {
       if (inputs[0].className.includes('select')) {
         console.log('Fake input detected!')
         el.querySelector('input[type="hidden"]').value = value
-        el.querySelector('span.select2-chosen').innerText = niceValue
+        const chosen = el.querySelector('span.select2-chosen')
+        if (chosen) {
+          chosen.innerText = niceValue
+        }
         // Change color
         const selectDiv = el.querySelector('.select2-default')
         if (!selectDiv) {
