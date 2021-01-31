@@ -105,24 +105,25 @@ def save():
 
 @app.route('/register', methods = ['POST'])
 def user_registration():
-   body = request.json
-   if body is None:
-      return { 'status': 'fail', 'message': 'Missing body' }
-   username, password = body['username'], body['password']
-   cur = con.cursor()
-   cur.execute("SELECT username FROM applr.users WHERE username = %s", (username,))
-   row = cur.fetchone()
-   if row:
-      return { 'status': 'fail', 'message': 'Username already exists' } 
+    body = request.json
+    if body is None:
+        return { 'status': 'fail', 'message': 'Missing body' }
 
-   cur = con.cursor()
-   cur.execute("INSERT INTO applr.users (username, password) VALUES (%s, %s)", (username, password))
-   con.commit()
-   cur = con.cursor()
-   cur.execute("SELECT id FROM applr.users WHERE username = %s", (username,))
-   row = cur.fetchone()
-   token = jwt.encode({ "id": row[0] }, JWT_SECRET, algorithm=JWT_ALGORITHM)
-   return { 'status': 'success', 'token': token }
+    username, password = body['username'], body['password']
+    cur = con.cursor()
+    cur.execute("SELECT username FROM applr.users WHERE username = %s", (username,))
+    row = cur.fetchone()
+    if row:
+        return { 'status': 'fail', 'message': 'Username already exists' } 
+
+    cur = con.cursor()
+    cur.execute("INSERT INTO applr.users (username, password) VALUES (%s, %s)", (username, password))
+    con.commit()
+    cur = con.cursor()
+    cur.execute("SELECT id FROM applr.users WHERE username = %s", (username,))
+    row = cur.fetchone()
+    token = jwt.encode({ "id": row[0] }, JWT_SECRET, algorithm=JWT_ALGORITHM)
+    return { 'status': 'success', 'token': token }
 
 @app.route('/populate', methods = ['POST'])
 def populate():
@@ -132,13 +133,15 @@ def populate():
         return { 'status': 'fail', 'message': 'Token is invalid' }
     elif auth == 'missing':
         return { 'status': 'fail', 'message': 'No token' }
+    user_id = auth['id']
+
     body = request.json
     if body is None:
-      return { 'status': 'fail', 'message': 'Missing body' }
+        return { 'status': 'fail', 'message': 'Missing body' }
     for i in body:
         name = i['name']
         cur = con.cursor()
-        cur.execute("SELECT value, extra_value, nice_value FROM applr.fields WHERE description = %s", (name, ))
+        cur.execute("SELECT value, extra_value, nice_value FROM applr.fields WHERE description = %s AND user_id = %s", (name, user_id))
         row = cur.fetchone()
         if row is not None:
             i['value'] = row[0]
