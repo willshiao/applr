@@ -20,3 +20,13 @@ var confettiSettings = {
 };
 var confetti = new ConfettiGenerator(confettiSettings);
 confetti.render();
+
+const logOut = document.getElementById("logout-btn")
+const myStorage = window.localStorage
+
+logOut.addEventListener('click', (e) => {
+    console.log("hello")
+    e.preventDefault()
+    myStorage.clear()
+    window.location.href = "./options.html"
+})
