@@ -80,18 +80,22 @@ def user_login():
 @app.route('/save', methods = ['POST'])
 def save(): 
     jwt_token = request.headers.get('authorization', None)
-    auth = authenticate(jwt_token)
-    if auth == 'invalid':
-        return { 'status': 'fail', 'message': 'Token is invalid' }
-    elif auth == 'missing':
+    if jwt_token:
+        jwt_token = jwt_token.split(' ')[-1]
+        try:
+            payload = jwt.decode(jwt_token, JWT_SECRET, algorithms=JWT_ALGORITHM)
+        except (jwt.DecodeError, jwt.ExpiredSignatureError):
+            return { 'status': 'fail', 'message': 'Token is invalid' }
+    else:
         return { 'status': 'fail', 'message': 'No token' }
+    user_id = payload[id]
     body = request.json
     if body is None:
         return { 'status': 'fail', 'message': 'Missing body' }
 
     for i in body:
         cur = con.cursor()
-        cur.execute("INSERT INTO applr.fields (user_id, description, value, type) VALUES (%s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s", (3, i['name'], i['value'], 'input', i['value'],))
+        cur.execute("INSERT INTO applr.fields (user_id, description, value, type) VALUES (%s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s", (user_id, i['name'], i['value'], 'input', i['value'],))
         con.commit()
 
     return { 'status': 'success' }
