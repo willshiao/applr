@@ -11,13 +11,14 @@
 <body>
     <h1 class="brand">Applr</h1>
     <div class="signin">
+        <canvas id="confetti-holder" style= "position : absolute; z-index : 1"></canvas>
         <div class="confirmation-welcome">
             <h1>You're all good to go!</h1>
-            <p>Click <a href="./applr.html">here</a> to check out your job applications!</p>
+            <p style= "position:fixed; z-index:2">Click <a href="./applr.html">here</a> to check out your job applications!</p>
         </div>
         <img src="./manThumbsUp.svg" class="confirmation free-svg">
     </div>
-    <script src="node_modules/confetti-js/dist/index.min.js"></script>
-    <canvas id="confetti-holder" animate=true></canvas>
+    <script src="./confetti-js-master/dist/index.min.js"></script>
+    <script src="./confirmation.js"></script>
 </body>
 </html>
