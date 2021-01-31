@@ -1,5 +1,3 @@
-const fieldCounter = {}
-
 function checkExistence(root) {
   const hasInput = (root.querySelector('input[type="text"]') !== null)
   const hasSelect = (root.querySelector('select') !== null)
@@ -8,7 +6,10 @@ function checkExistence(root) {
   return { hasInput, hasSelect, hasFile, hasCheckbox }
 }
 
-const fieldLabels = Array.from(document.querySelectorAll('div#application div.field>label:first-child, div#application div.field>fieldset>legend>label'))
+// To allow for multiple injections, we use let
+let fieldCounter = {}
+
+let fieldLabels = Array.from(document.querySelectorAll('div#application div.field>label:first-child, div#application div.field>fieldset>legend>label'))
   .filter(el => {
     let parent = el.parentNode
     if (parent.nodeName === 'LEGEND') {
@@ -20,12 +21,14 @@ const fieldLabels = Array.from(document.querySelectorAll('div#application div.fi
     const { hasInput, hasSelect, hasFile, hasCheckbox } = checkExistence(parent)
     return hasInput || hasSelect || hasFile || hasCheckbox
   })
-  const fields = fieldLabels
+let fields = fieldLabels
   .map(el => ((el.parentNode.nodeName === 'LEGEND') ? el.parentNode.parentNode.parentNode : el.parentNode))
-  const fieldNames = fieldLabels.map(el => el.innerText)
+
+let fieldNames = fieldLabels.map(el => el.innerText)
   .map(text => text.trim())
   .map(text => text.split('\n')[0])
-  const fieldInfo = fieldNames
+
+let fieldInfo = fieldNames
   .map((fieldName, idx) => {
     const required = (fieldName[fieldName.length - 1] === '*')
     const el = fields[idx]
@@ -139,5 +142,44 @@ function rehydrateEls(data) {
 // console.log(fields)
 // console.log(fieldNames)
 // console.log(fieldInfo)
-console.log(getInfo(fieldInfo))
+// console.log(getInfo(fieldInfo))
 // console.log(JSON.stringify(getInfo(fieldInfo)))
+async function saveFormValues() {
+  const res = await fetch('http://localhost:5000/save', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(getInfo(fieldInfo))
+  })
+  console.log('Got: ', await res.json())
+}
+
+function getAppInfo() {
+  const companyName = document.querySelector('span.company-name').innerText.slice(3)
+  const position = document.querySelector('h1.app-title').innerText
+  // strip out query string
+  const link = window.location.origin + window.location.pathname
+  return { companyName, position, link }
+}
+
+async function saveApplicationValues() {
+  const { companyName, position, link } = getAppInfo()
+  const res = await fetch('http://localhost:5000/applications', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      cname: companyName,
+      link,
+      job: position
+    })
+  })
+  console.log('Saved application: ', await res.json())
+}
+
+// saveFormValues()
+saveApplicationValues()
