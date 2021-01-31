@@ -20,7 +20,6 @@
     text-decoration: none;
 }
 
-
 .signin {
     background-color: #9fa8da;
     width: 100%;
@@ -35,7 +34,6 @@
 
 .signin-welcome{
     text-align: center;
-
     color: black;
 }
 
@@ -73,4 +71,23 @@
 #signup-no-match{
     color:red;
     margin: 0px 0;
+}
+
+
+
+.confirmation-welcome {
+    font-size: 1.2em;
+    text-align: center;
+    color: black;
+}
+.confirmation.free-svg {
+    width: 25%;
+    min-width: 500px;
+}
+
+.brand {
+    position:absolute;
+    z-index: 1;
+    margin:40px;
+    
 }
