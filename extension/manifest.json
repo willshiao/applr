@@ -3,6 +3,8 @@
   "version": "1.0",
   "description": "Automate the tedious task of inputting your information in job applications in 1 click!",
   "permissions": ["activeTab", "declarativeContent", "storage"],
+  "content_security_policy": "script-src 'self' https://unpkg.com/sweetalert/dist/sweetalert.min.js; object-src 'self'",
+
   "background": {
       "scripts": ["background.js"],
       "persistent": false

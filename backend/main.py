@@ -19,7 +19,8 @@ def authenticate(jwt_token):
     if jwt_token:
         jwt_token = jwt_token.split(' ')[-1]
         try:
-            jwt.decode(jwt_token, JWT_SECRET, algorithms=JWT_ALGORITHM)
+            payload = jwt.decode(jwt_token, JWT_SECRET, algorithms=JWT_ALGORITHM)
+            return payload
         except (jwt.DecodeError, jwt.ExpiredSignatureError):
             return 'invalid'
     else:
@@ -37,8 +38,9 @@ def applications():
         return { 'status': 'fail', 'message': 'Token is invalid' }
     elif auth == 'missing':
         return { 'status': 'fail', 'message': 'No token' }
+    user_id = auth['id']
     cur = con.cursor()
-    cur.execute("SELECT cname, job, status, app_date, last_resp, notes, link, aid FROM applr.apps WHERE user_id = %s", (3,))
+    cur.execute("SELECT cname, job, status, app_date, last_resp, notes, link, aid FROM applr.apps WHERE user_id = %s", (user_id,))
     rows = cur.fetchall()
     return {'data': rows}
 
@@ -51,13 +53,13 @@ def add_applications():
         return { 'status': 'fail', 'message': 'Token is invalid' }
     elif auth == 'missing':
         return { 'status': 'fail', 'message': 'No token' }
+    user_id = auth['id']
     body = request.json
     if body is None:
         return { 'status': 'fail', 'message': 'Missing body' }
-
     cur = con.cursor()
     cur.execute("INSERT INTO applr.apps (user_id, cname, link, job, status, app_date) VALUES (%s, %s, %s, %s, %s, %s)",
-        (3, body['cname'], body['link'], body['job'], 'Applied', date.today()))
+        (user_id, body['cname'], body['link'], body['job'], 'Applied', date.today()))
     con.commit()
     return { 'status': 'success' }
 
@@ -81,15 +83,12 @@ def user_login():
 @app.route('/save', methods = ['POST'])
 def save(): 
     jwt_token = request.headers.get('authorization', None)
-    if jwt_token:
-        jwt_token = jwt_token.split(' ')[-1]
-        try:
-            payload = jwt.decode(jwt_token, JWT_SECRET, algorithms=JWT_ALGORITHM)
-        except (jwt.DecodeError, jwt.ExpiredSignatureError):
-            return { 'status': 'fail', 'message': 'Token is invalid' }
-    else:
+    auth = authenticate(jwt_token)
+    if auth == 'invalid':
+        return { 'status': 'fail', 'message': 'Token is invalid' }
+    elif auth == 'missing':
         return { 'status': 'fail', 'message': 'No token' }
-    user_id = payload['id']
+    user_id = auth['id']
     body = request.json
     if body is None:
         return { 'status': 'fail', 'message': 'Missing body' }

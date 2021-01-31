@@ -3,7 +3,8 @@
 const loginForm = document.getElementById("login-form");
 const loginBtn = document.getElementById("login-btn");
 const loginUser = document.getElementById("signin-username");
-
+const noMatch = document.getElementById("signup-no-match");
+noMatch.style.display = "none";
 const myStorage = window.localStorage
 
 loginForm.addEventListener("submit", (e)=> {
@@ -30,7 +31,20 @@ loginForm.addEventListener("submit", (e)=> {
         // console.log(myStorage.getItem("token"))
         // chrome.storage.local.set( { token: token }, () => console.log('Token is set to ' + token))
         // chrome.storage.local.get(['token'], (result) => console.log('Value currently is ' + result.key))
+        if (data.status === "success") {
+            noMatch.style.display = "none";
+            swal({
+                title: "Signed in!",
+                icon: "success",
+                button: "Close",
+              }).then(function() {
+                window.location = "./confirmation.html";
+            });
+        }
+        else {
+            noMatch.style.display = "block";
+        }
+     
     })
-    // console.log(username, password)  
-    // window.location.href = "./applr.html"
+    
 })

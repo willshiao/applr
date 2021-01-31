@@ -1,0 +1,27 @@
+{
+  "name": "confetti-js",
+  "version": "0.0.18",
+  "description": "Easily Generate random confetti for your above-the-fold content",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
+  "scripts": {
+    "dev": "rollup -c -w",
+    "build": "rm -fr ./dist && rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Agezao/confetti-js.git"
+  },
+  "author": "Gabriel Age <0800.grc@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Agezao/confetti-js/issues"
+  },
+  "homepage": "https://github.com/Agezao/confetti-js#readme",
+  "devDependencies": {
+    "rollup": "^1.10.1",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-uglify": "^6.0.2"
+  }
+}

@@ -1,14 +1,35 @@
 async function main () {
 
-// var dataTable = $('#dataTable').DataTable();
 var editor; // use a global for the submit and return data rendering in the examples
 var dataTable;
+const myStorage = window.localStorage
+console.log("hello")
+console.log(myStorage.getItem("applrToken"))
 // fetch data
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6M30.1qmoIT5HL0HA7PNzXykGC1YbjBmnAelbEl4X77U1-Ig
+const signIn = document.getElementById("sign-in")
+const signUp = document.getElementById("sign-up")
+const logOut = document.getElementById("logout-btn")
+
+if (myStorage.getItem("applrToken")) {
+    signIn.removeAttribute("href")
+    signIn.innerHTML = "Welcome back!"
+    signUp.innerHTML = ""
+} else {
+    logOut.style.display = "none"
+}
+
+logOut.addEventListener('click', (e) => {
+    e.preventDefault()
+    myStorage.clear()
+    window.location.href = "./signin.html"
+})
+
 const res = await fetch('http://localhost:5000/applications', {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6M30.1qmoIT5HL0HA7PNzXykGC1YbjBmnAelbEl4X77U1-Ig'
+      'Authorization': 'Bearer ' + myStorage.getItem("applrToken")
     },
   })
 
@@ -19,6 +40,8 @@ appData = {"data": []}
 data["data"].forEach((app)=>{
     var appl = {};
     var i = 0;
+    var link = app[6];
+    app[6] = `<a href="${app[6]}">${link.length > 20 ? link.slice(0,20)+"..." : link}</a>`
     app[3] = moment(app[3]).format('L');
     app[4] = moment(app[4]).format('L');
     for (i; i < app.length; i++) {
@@ -59,10 +82,10 @@ $(document).ready(function() {
                 label: "Notes",
                 name: "notes"
             },
-            {
-                label: "Application Link", 
-                name:"link"
-            }
+            // {
+            //     label: "Application Link", 
+            //     name:"link"
+            // }
         ]
     } );
  
@@ -79,36 +102,16 @@ $(document).ready(function() {
         ],
         select: true,
         buttons: [
-            { extend: 'create', editor: editor },
             { extend: 'edit',   editor: editor },
             { extend: 'remove', editor: editor }
-        ]
+        ], "columnDefs": [
+            { "width": "10%", "targets": [2,3,4,6] },
+            {"width": "20%", "targets": [5]},
+            {"width": "30%", "targets": [1]}
+          ], "pageLength": 15
     }).rows.add(appData["data"]).draw();
 } );
 
-// const fillTable = (data) => {
-//     apps = data["data"]
-//     apps.map(app => {
-//         app[1] = `<a href=${app[1]} ">${app[1]}</a>`
-//         app[3] = `<input value=${app[3]} style="border: none;display: inline; text-align:center";>`
-//         // change to mm/dd/yyy format
-//         app[4] = moment(app[4]).format('L');
-//         app[5] = moment(app[5]).format('L');
-//         app[6] = `<textarea style="border: none;display: inline; text-align:center";>${app[6] !== null ? app[6]:''}</textarea>`
-        
-//     })
-//     dataTable.rows.add(data["data"]).draw();
-// }
-
-// fillTable(appData);
-
-// dataTable.on( 'click', 'tbody td', function () {
-//   //status
-//     if (dataTable.cell(this)[0][0]["column"] === 3){
-//         console.log($(dataTable.cell(this).data()).val());
-//     }
-   
-// } );
 }
 
 main()

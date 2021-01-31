@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
+    <h1 class="brand">Applr</h1>
     <div class="signin">
         <div class="signin-welcome">
             <h1>Welcome Back!</h1>
@@ -25,6 +26,7 @@
                 
                 <label for="login-form" class="form-label">Password</label>
                 <input type="password" name="password" class="form-control" id="signin-password" placeholder="Password">
+                <p id="signup-no-match">Failed to sign in! Credentials do not match.</p>
             
             
                 <input type="submit" value="Sign In" id="login-btn" class="btn btn-primary">
@@ -34,5 +36,6 @@
         </div>
     </div>
 </body>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="./signin.js"></script>
 </html>
