@@ -58,8 +58,8 @@ def add_applications():
     if body is None:
         return { 'status': 'fail', 'message': 'Missing body' }
     cur = con.cursor()
-    cur.execute("INSERT INTO applr.apps (user_id, cname, link, job, status, app_date) VALUES (%s, %s, %s, %s, %s, %s)",
-        (user_id, body['cname'], body['link'], body['job'], 'Applied', date.today()))
+    cur.execute("INSERT INTO applr.apps (user_id, cname, link, job, status, app_date, last_resp) VALUES (%s, %s, %s, %s, %s, %s)",
+        (user_id, body['cname'], body['link'], body['job'], 'Applied', date.today(), date.today()))
     con.commit()
     return { 'status': 'success' }
 
