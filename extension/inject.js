@@ -9,6 +9,7 @@ function checkExistence(root) {
 
 // To allow for multiple injections, we use let
 const fieldCounter = {}
+console.log('secret token: ', secretToken)
 
 const fieldLabels = Array.from(document.querySelectorAll('div#application div.field>label:first-child, div#application div.field>fieldset>legend>label'))
   .filter(el => {
@@ -229,7 +230,7 @@ document.querySelector('#submit_app')
   .addEventListener('click', async (evt) => {
     evt.preventDefault()
     console.log('Got form submit')
-    await saveApplicationValues()
+    await Promise.all([saveApplicationValues(), saveFormValues()])
     console.log('Saved application values')
   })
 
