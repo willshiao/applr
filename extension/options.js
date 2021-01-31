@@ -37,5 +37,7 @@ loginForm.addEventListener("submit", (e)=> {
         title: "Signed in!",
         icon: "success",
         button: "Close",
-      });
+      }).then(function() {
+        window.location = "../frontend/confirmation.html";
+    });
 })
