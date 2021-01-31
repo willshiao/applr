@@ -6,8 +6,10 @@ import json
 from datetime import date
 from flask_cors import CORS
 import nltk
+from wutils.general import load_pickle
 from nltk.corpus import stopwords
 from nltk import word_tokenize
+import numpy as np
 import string
 
 nltk.download('stopwords')
@@ -16,7 +18,12 @@ nltk.download('punkt')
 JWT_SECRET = ''
 JWT_ALGORITHM = 'HS256'
 JACCARD_THRESHOLD = 0.07
+DECISION_THRESH = 0.05
 USE_REDIS = True
+
+print('Loading models...')
+vectorizer = load_pickle('./vectorizer.pkl')
+lr_model = load_pickle('./lr_model.pkl')
 
 if USE_REDIS:
     r = redis.Redis(host='10.35.129.3', port=6379, decode_responses=True)
@@ -43,6 +50,17 @@ def jaccard(a, b):
         return 1
     return len(a_s & b_s) / len(a_s | b_s)
 
+def lr_evaluate_match(match0, match1):
+    try:
+        feat_vec = np.abs(vectorizer.transform([match0]) - vectorizer.transform([match1]))
+        prob = lr_model.predict_proba(feat_vec)[0, 0]
+        if (prob > DECISION_THRESH):
+            return True
+        return False
+    except Exception as e:
+        print('Error when evaluating match: ', e)
+        return False
+
 def fuzzy_match(user_id, entry):
     cur = con.cursor()
     cur.execute("SELECT description, value, extra_value, nice_value FROM applr.fields WHERE user_id = %s", (user_id,))
@@ -61,7 +79,11 @@ def fuzzy_match(user_id, entry):
     if max_val < JACCARD_THRESHOLD:
         return None
     print(f'Found match between {rows[max_idx][0]} and {entry["name"]}: ', max_val)
-    return rows[max_idx][1:]
+    if (lr_evaluate_match(rows[max_idx][0], entry["name"])):
+        print('Match confirmed')
+        return rows[max_idx][1:]
+    print('Match rejected')
+    return None
 
 def authenticate(jwt_token):
     if jwt_token:
