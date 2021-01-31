@@ -151,7 +151,7 @@ def create_app():
             extra_val = i['extraValue'] if 'extraValue' in i else ''
             if USE_REDIS:
                 hname = f'{user_id}:{i["name"]}'
-                r.hset(hname, 'value', i['value'])
+                r.hset(hname, 'value', '' if i['value'] is None else i['value'])
                 r.hset(hname, 'niceValue', '' if nice_val is None else nice_val)
                 r.hset(hname, 'extraValue', '' if extra_val is None else extra_val)
             cur.execute("INSERT INTO applr.fields (user_id, description, value, nice_value, extra_value, type) VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s, nice_value = %s, extra_value = %s",
