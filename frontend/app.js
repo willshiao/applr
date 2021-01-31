@@ -1,6 +1,5 @@
 async function main () {
 
-// var dataTable = $('#dataTable').DataTable();
 var editor; // use a global for the submit and return data rendering in the examples
 var dataTable;
 // fetch data
@@ -91,30 +90,6 @@ $(document).ready(function() {
     }).rows.add(appData["data"]).draw();
 } );
 
-
-// const fillTable = (data) => {
-//     apps = data["data"]
-//     apps.map(app => {
-//         app[1] = `<a href=${app[1]} ">${app[1]}</a>`
-//         app[3] = `<input value=${app[3]} style="border: none;display: inline; text-align:center";>`
-//         // change to mm/dd/yyy format
-//         app[4] = moment(app[4]).format('L');
-//         app[5] = moment(app[5]).format('L');
-//         app[6] = `<textarea style="border: none;display: inline; text-align:center";>${app[6] !== null ? app[6]:''}</textarea>`
-        
-//     })
-//     dataTable.rows.add(data["data"]).draw();asdfasdfasfdasfkj
-// }
-
-// fillTable(appData);
-
-// dataTable.on( 'click', 'tbody td', function () {
-//   //status
-//     if (dataTable.cell(this)[0][0]["column"] === 3){
-//         console.log($(dataTable.cell(this).data()).val());
-//     }
-   
-// } );
 }
 
 main()
