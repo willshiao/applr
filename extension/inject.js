@@ -1,3 +1,4 @@
+(function () {
 function checkExistence(root) {
   const hasInput = (root.querySelector('input[type="text"]') !== null)
   const hasSelect = (root.querySelector('select') !== null)
@@ -7,9 +8,9 @@ function checkExistence(root) {
 }
 
 // To allow for multiple injections, we use let
-let fieldCounter = {}
+const fieldCounter = {}
 
-let fieldLabels = Array.from(document.querySelectorAll('div#application div.field>label:first-child, div#application div.field>fieldset>legend>label'))
+const fieldLabels = Array.from(document.querySelectorAll('div#application div.field>label:first-child, div#application div.field>fieldset>legend>label'))
   .filter(el => {
     let parent = el.parentNode
     if (parent.nodeName === 'LEGEND') {
@@ -21,14 +22,14 @@ let fieldLabels = Array.from(document.querySelectorAll('div#application div.fiel
     const { hasInput, hasSelect, hasFile, hasCheckbox } = checkExistence(parent)
     return hasInput || hasSelect || hasFile || hasCheckbox
   })
-let fields = fieldLabels
+const fields = fieldLabels
   .map(el => ((el.parentNode.nodeName === 'LEGEND') ? el.parentNode.parentNode.parentNode : el.parentNode))
 
-let fieldNames = fieldLabels.map(el => el.innerText)
+const fieldNames = fieldLabels.map(el => el.innerText)
   .map(text => text.trim())
   .map(text => text.split('\n')[0])
 
-let fieldInfo = fieldNames
+const fieldInfo = fieldNames
   .map((fieldName, idx) => {
     const required = (fieldName[fieldName.length - 1] === '*')
     const el = fields[idx]
@@ -54,6 +55,7 @@ function getInfo (oldInfo) {
     let { el, hasInput, hasSelect, hasFile, hasCheckbox } = info
     let value = null
     let extraValue = null
+    let niceValue = null
 
     if (hasCheckbox) {
       const input = el.querySelector('input[type="text"]')
@@ -65,12 +67,14 @@ function getInfo (oldInfo) {
     if (hasSelect) {
       console.log('Trying to get stuff for el: ', el)
       value = el.querySelector('select').value
+      niceValue = el.querySelector('span.select2-chosen').innerText
     } else if (hasInput) {
       const inputs = el.querySelectorAll('input[type="text"]')
       // Handle special "fake input" cases
       if (inputs[0].className.includes('select')) {
         console.log('Fake input detected!')
         value = el.querySelector('input[type="hidden"]').value
+        niceValue = el.querySelector('span.select2-chosen').innerText
       } else {
         value = inputs[0].value
         if (inputs.length > 1) {
@@ -87,14 +91,15 @@ function getInfo (oldInfo) {
     return {
       ...info,
       value,
-      extraValue
+      extraValue,
+      niceValue
     }
   })
 }
 
 function setInfo (newInfo) {
   newInfo.forEach(info => {
-    let { el, hasInput, hasSelect, hasFile, hasCheckbox, value, extraValue } = info
+    let { el, hasInput, hasSelect, hasFile, hasCheckbox, value, extraValue, niceValue } = info
     if (!value) {
       console.log('Missing value for: ', info, 'skipping...')
       return null
@@ -107,12 +112,34 @@ function setInfo (newInfo) {
     }
     if (hasSelect) {
       el.querySelector('select').value = value
+      el.querySelector('span.select2-chosen').innerText = niceValue
+      // Change color
+      const selectDiv = el.querySelector('.select2-default')
+      if (!selectDiv) {
+        console.log('Missing select div for: ', el)
+        return null
+      }
+      selectDiv.className = selectDiv.className
+        .split(' ')
+        .filter(n => n !== 'select2-default')
+        .join(' ')
     } else if (hasInput) {
       const inputs = el.querySelectorAll('input[type="text"]')
       // Handle special "fake input" cases
       if (inputs[0].className.includes('select')) {
         console.log('Fake input detected!')
-        value = el.querySelector('input[type="hidden"]').value
+        el.querySelector('input[type="hidden"]').value = value
+        el.querySelector('span.select2-chosen').innerText = niceValue
+        // Change color
+        const selectDiv = el.querySelector('.select2-default')
+        if (!selectDiv) {
+          console.log('Missing select div for: ', el)
+          return null
+        }
+        selectDiv.className = selectDiv.className
+          .split(' ')
+          .filter(n => n !== 'select2-default')
+          .join(' ')
       } else {
         inputs[0].value = value
         if (extraValue && inputs.length > 1) {
@@ -198,7 +225,16 @@ async function loadFormValues() {
   setInfo(body)
 }
 
+document.querySelectorAll('form')
+  .forEach(f =>f.addEventListener('submit', (evt) => {
+    evt.preventDefault()
+    console.log('Intercepted form submit!')
+  })
+  )
+
 loadFormValues()
 
 // saveFormValues()
 // saveApplicationValues()
+// console.log(getInfo(fieldInfo))
+})()
