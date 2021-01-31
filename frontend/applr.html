@@ -13,42 +13,47 @@
 </head>
 <body>
     <div class="home">
+        <br>
         <div class="navbar">
             <h1 class="title">Applr</h1>
+            <input type="button" value="Log Out" id="logout-btn" class="btn btn-primary">
+        </div>
+        <br>
+        <div class="table">
+            <h3><span class="ltt" style="display:inline-block;transform:scale(1,1.5)">&LT;</span> Welcome Back <span class="gtt" style="display:inline-block;transform:scale(1,1.5)">&GT;</span></h3>
             <div class="links">
                 <a href="./signin.html" id="sign-in">Sign In</a>
                 <a href="./signup.html" id="sign-up">Sign Up</a>
             </div>
-            <input type="button" value="Log Out" id="logout-btn" class="btn btn-primary">
+            <h4 style="margin: 20px 0">View Your Applications</h4>
+            <table id="dataTable"  class="display compact " >
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Position</th>
+                        <th>Status</th>
+                        <th>Date Applied</th>
+                        <th>Last Response</th>
+                        <th>Notes</th>
+                        <th>Application Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Position</th>
+                        <th>Status</th>
+                        <th>Date Applied</th>
+                        <th>Last Response</th>
+                        <th>Notes</th>
+                        <th>Application Link</th>
+                    </tr>
+                </tfoot>
+            </table>   
         </div>
-        <h4 style="margin: 20px 0">View your applications</h4>
-        <table id="dataTable"  class="display compact" >
-            <thead>
-                <tr>
-                    <th>Company Name</th>
-                    <th>Position</th>
-                    <th>Status</th>
-                    <th>Date Applied</th>
-                    <th>Last Response</th>
-                    <th>Notes</th>
-                    <th>Application Link</th>
-                </tr>
-            </thead>
-            <tbody>
-              
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>Company Name</th>
-                    <th>Position</th>
-                    <th>Status</th>
-                    <th>Date Applied</th>
-                    <th>Last Response</th>
-                    <th>Notes</th>
-                    <th>Application Link</th>
-                </tr>
-            </tfoot>
-        </table>   
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
