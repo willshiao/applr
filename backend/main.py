@@ -3,10 +3,13 @@ import jwt
 from flask import Flask, request
 import json
 from datetime import date
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 
-con = psycopg2.connect(database="postgres", user="postgres", password="rlppa", host="34.83.221.162", port="5432")
+con = psycopg2.connect(database="postgres", user="postgres", password="", host="34.83.221.162", port="5432")
 print("Database opened successfully")
 
 secret = ''
