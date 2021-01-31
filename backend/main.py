@@ -56,7 +56,8 @@ def add_applications():
         return { 'status': 'fail', 'message': 'Missing body' }
 
     cur = con.cursor()
-    cur.execute("INSERT INTO applr.apps (user_id, cname, link, job, status, app_date) VALUES (%s, %s, %s, %s, %s, %s)", (3, body['cname'], body['link'], body['job'], 'Applied', date.today()))
+    cur.execute("INSERT INTO applr.apps (user_id, cname, link, job, status, app_date) VALUES (%s, %s, %s, %s, %s, %s)",
+        (3, body['cname'], body['link'], body['job'], 'Applied', date.today()))
     con.commit()
     return { 'status': 'success' }
 
@@ -88,14 +89,17 @@ def save():
             return { 'status': 'fail', 'message': 'Token is invalid' }
     else:
         return { 'status': 'fail', 'message': 'No token' }
-    user_id = payload[id]
+    user_id = payload['id']
     body = request.json
     if body is None:
         return { 'status': 'fail', 'message': 'Missing body' }
 
     for i in body:
         cur = con.cursor()
-        cur.execute("INSERT INTO applr.fields (user_id, description, value, type) VALUES (%s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s", (user_id, i['name'], i['value'], 'input', i['value'],))
+        nice_val = i['niceValue'] if 'niceValue' in i else ''
+        extra_val = i['extraValue'] if 'extraValue' in i else ''
+        cur.execute("INSERT INTO applr.fields (user_id, description, value, nice_value, extra_value, type) VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s, nice_value = %s, extra_value = %s",
+            (user_id, i['name'], i['value'], nice_val, extra_val, 'input', i['value'], nice_val, extra_val))
         con.commit()
 
     return { 'status': 'success' }
@@ -135,9 +139,10 @@ def populate():
     for i in body:
         name = i['name']
         cur = con.cursor()
-        cur.execute("SELECT value FROM applr.fields WHERE description = %s", (name, ))
+        cur.execute("SELECT value, extra_value, nice_value FROM applr.fields WHERE description = %s", (name, ))
         row = cur.fetchone()
         if row is not None:
-            value = row[0]
-            i['value'] = value
+            i['value'] = row[0]
+            i['extraValue'] = row[1]
+            i['niceValue'] = row[2]
     return { 'status': 'success','body': body}
