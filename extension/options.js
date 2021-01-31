@@ -8,7 +8,7 @@ noMatch.style.display = "none";
 const myStorage = window.localStorage
 
 if (myStorage.getItem("applrToken")) {
-    window.location.href = "http://localhost:5500/frontend/applr.html"
+    window.location.href = "./confirmation.html"
 }
 
 loginForm.addEventListener("submit", (e)=> {
