@@ -19,6 +19,8 @@ appData = {"data": []}
 data["data"].forEach((app)=>{
     var appl = {};
     var i = 0;
+    var link = app[6];
+    app[6] = `<a href="${app[6]}">${link.length > 20 ? link.slice(0,20)+"..." : link}</a>`
     app[3] = moment(app[3]).format('L');
     app[4] = moment(app[4]).format('L');
     for (i; i < app.length; i++) {
@@ -59,10 +61,10 @@ $(document).ready(function() {
                 label: "Notes",
                 name: "notes"
             },
-            {
-                label: "Application Link", 
-                name:"link"
-            }
+            // {
+            //     label: "Application Link", 
+            //     name:"link"
+            // }
         ]
     } );
  
@@ -79,12 +81,16 @@ $(document).ready(function() {
         ],
         select: true,
         buttons: [
-            { extend: 'create', editor: editor },
             { extend: 'edit',   editor: editor },
             { extend: 'remove', editor: editor }
-        ]
+        ], "columnDefs": [
+            { "width": "10%", "targets": [2,3,4,6] },
+            {"width": "20%", "targets": [5]},
+            {"width": "30%", "targets": [1]}
+          ], "pageLength": 15
     }).rows.add(appData["data"]).draw();
 } );
+
 
 // const fillTable = (data) => {
 //     apps = data["data"]
@@ -97,7 +103,7 @@ $(document).ready(function() {
 //         app[6] = `<textarea style="border: none;display: inline; text-align:center";>${app[6] !== null ? app[6]:''}</textarea>`
         
 //     })
-//     dataTable.rows.add(data["data"]).draw();
+//     dataTable.rows.add(data["data"]).draw();asdfasdfasfdasfkj
 // }
 
 // fillTable(appData);

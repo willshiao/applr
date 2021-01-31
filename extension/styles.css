@@ -74,3 +74,10 @@
     color:red;
     margin: 0px 0;
 }
+
+.brand {
+    position:absolute;
+    z-index: 1;
+    margin:40px;
+    
+}
