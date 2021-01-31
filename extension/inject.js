@@ -225,12 +225,13 @@ async function loadFormValues() {
   setInfo(body)
 }
 
-document.querySelectorAll('form')
-  .forEach(f =>f.addEventListener('submit', (evt) => {
+document.querySelector('#submit_app')
+  .addEventListener('click', async (evt) => {
     evt.preventDefault()
-    console.log('Intercepted form submit!')
+    console.log('Got form submit')
+    await saveApplicationValues()
+    console.log('Saved application values')
   })
-  )
 
 loadFormValues()
 
