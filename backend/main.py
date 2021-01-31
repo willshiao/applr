@@ -20,7 +20,7 @@ USE_REDIS = True
 
 if USE_REDIS:
     r = redis.Redis(host='10.35.129.3', port=6379, decode_responses=True)
-con = psycopg2.connect(database="postgres", user="postgres", password="rlppa", host="34.83.221.162", port="5432")
+con = psycopg2.connect(database="postgres", user="postgres", password="rlppa", host="10.35.128.3", port="5432")
 print("Database opened successfully", flush=True)
 
 table = str.maketrans('/', ' ', '\'[\\]^_`{|}~"#$%&()*+,-:;<=>@?.!' + string.digits)
@@ -152,8 +152,8 @@ def create_app():
             if USE_REDIS:
                 hname = f'{user_id}:{i["name"]}'
                 r.hset(hname, 'value', i['value'])
-                r.hset(hname, 'niceValue', nice_val)
-                r.hset(hname, 'extraValue', extra_val)
+                r.hset(hname, 'niceValue', '' if nice_val is None else nice_val)
+                r.hset(hname, 'extraValue', '' if extra_val is None else extra_val)
             cur.execute("INSERT INTO applr.fields (user_id, description, value, nice_value, extra_value, type) VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (user_id, description) DO UPDATE SET value = %s, nice_value = %s, extra_value = %s",
                 (user_id, i['name'], i['value'], nice_val, extra_val, 'input', i['value'], nice_val, extra_val))
             con.commit()
